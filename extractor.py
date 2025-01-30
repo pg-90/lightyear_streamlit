@@ -30,7 +30,7 @@ class Extractor:
         """Downloads ticker data from Yahoo Finance"""
 
         for ticker in self.tickers:
-            #print(f"Extracting data for {ticker}...")
+            # print(f"Extracting data for {ticker}...")
 
             # Download stock data using yfinance
             stock_data = yf.download(
@@ -38,7 +38,8 @@ class Extractor:
                 start=self.start_date,
                 end=self.end_date,
                 group_by="ticker",
-                progress=False
+                progress=False,
+                prepost=True,
             )
             stock_data = stock_data[ticker]
 
@@ -48,10 +49,10 @@ class Extractor:
             stock_data.columns = [
                 c.lower().replace(" ", "_") for c in stock_data.columns
             ]
-            #print(stock_data.columns)
+            # print(stock_data.columns)
             # Save the data to a CSV file in the target folder
             file_path = os.path.join(self.target_folder, f"{ticker}.csv")
             stock_data.to_csv(file_path, index=False)
-            #print(f"Saved {ticker} data to {file_path}")
+            # print(f"Saved {ticker} data to {file_path}")
 
         return stock_data
