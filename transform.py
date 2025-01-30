@@ -31,9 +31,6 @@ class TickerAnalyzer:
         # Ensure the data is sorted by date
         ticker_data = ticker_data.sort_values(by="date")
 
-        # Add 'ticker' column if missing (based on the file name or predefined logic)
-        ticker_data["ticker"] = trimmed_ticker
-
         # Reindex to include all dates between the min and max date for the ticker
         full_date_range = pd.date_range(
             start=ticker_data["date"].min(), end=ticker_data["date"].max()
@@ -43,8 +40,8 @@ class TickerAnalyzer:
         ticker_data = ticker_data.set_index("date").reindex(full_date_range)
 
         # Forward fill for 'open', 'high', 'low', 'close'
-        ticker_data[["ticker", "open", "high", "low", "close"]] = ticker_data[
-            ["ticker", "open", "high", "low", "close"]
+        ticker_data[["open", "high", "low", "close"]] = ticker_data[
+            ["open", "high", "low", "close"]
         ].ffill()
 
         # Backward fill for 'volume'
@@ -59,6 +56,9 @@ class TickerAnalyzer:
             window=25,
             constant=0.015,
         )
+
+        ticker_data["pct_change"] = ticker_data["close"].pct_change() * 100
+
         ticker_data["cci_25"] = cci.cci()
 
         # RSI (Relative Strength Index)

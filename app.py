@@ -10,8 +10,8 @@ from transform import TickerAnalyzer
 st.title("Lightyear Analysis App")
 
 # Default settings
-default_start_date = "2024-01-01"
-default_days = 15
+default_start_date = "2025-01-01"
+default_days = 4
 default_rsi_buy = 35
 default_cci_buy = -90
 default_rsi_sell = 65
