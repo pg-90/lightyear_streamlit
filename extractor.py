@@ -40,6 +40,7 @@ class Extractor:
                 group_by="ticker",
                 progress=False,
                 prepost=True,
+                interval="60m"
             )
             stock_data = stock_data[ticker]
 
