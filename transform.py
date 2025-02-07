@@ -26,7 +26,8 @@ class TickerAnalyzer:
         ticker_data = pd.read_csv(file_path)
 
         # Convert the 'date' column to datetime format
-        ticker_data["date"] = pd.to_datetime(ticker_data["date"])
+
+        ticker_data["date"] = pd.to_datetime(ticker_data["datetime"])
 
         # Ensure the data is sorted by date
         ticker_data = ticker_data.sort_values(by="date")
@@ -80,5 +81,16 @@ class TickerAnalyzer:
 
         # Save the analyzed data to the analyzed folder with the trimmed ticker name
         analyzed_file_path = os.path.join(self.analyzed_folder, f"{trimmed_ticker}.csv")
-        ticker_data.to_csv(analyzed_file_path, index=False)
+
+        cols_to_keep = [
+            "date",
+            "close",
+            "pct_change",
+            "cci_25",
+            "rsi_14",
+            "ma_9",
+            "ma_14",
+            "ma_50",
+        ]
+        ticker_data.to_csv(analyzed_file_path, index=False, columns=cols_to_keep)
         # print(f"Saved analyzed data for {trimmed_ticker} to {analyzed_file_path}")
