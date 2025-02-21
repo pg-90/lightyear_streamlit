@@ -25,9 +25,9 @@ st.title("Lightyear Analysis App")
 
 # Default settings
 default_start_date = (datetime.today() - timedelta(days=151)).strftime("%Y-%m-%d")
-default_days = 4
-default_rsi_buy = 35
-default_cci_buy = -90
+default_days = 7
+default_rsi_buy = 40
+default_cci_buy = -85
 default_rsi_sell = 65
 default_cci_sell = 90
 
@@ -134,7 +134,10 @@ with st.expander("Select Filter Criteria & Symbols"):
         today = datetime.now(timezone.utc)
         days_ago = today - timedelta(days=days)
 
-        filtered_data["date"] = pd.to_datetime(filtered_data["date"])
+        filtered_data["date"] = pd.to_datetime(
+            filtered_data["date"], errors="coerce"
+        ).dt.tz_localize(None)
+        days_ago = days_ago.replace(tzinfo=None)
         df_filtered = filtered_data[filtered_data["date"] >= days_ago]
 
         # Add 'criteria' column based on user-defined thresholds
@@ -187,7 +190,7 @@ with st.expander("Plot Selected Symbol Data"):
 
     with col_date_range:
         start_date_plot = st.date_input(
-            "Start Date", datetime.today() - timedelta(days=30)
+            "Start Date", datetime.today() - timedelta(days=45)
         )
         end_date_plot = datetime.today()  # Set end date to today's date
 
