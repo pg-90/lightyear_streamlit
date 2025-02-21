@@ -2,7 +2,7 @@ import os
 import json
 import pandas as pd
 import streamlit as st
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from extractor import Extractor
 from transform import TickerAnalyzer
 import matplotlib.pyplot as plt
@@ -131,7 +131,7 @@ with st.expander("Select Filter Criteria & Symbols"):
         filtered_data = load_and_filter_analyzed_data(analyzed_folder)
 
         # Filter last X days
-        today = datetime.today()
+        today = datetime.now(timezone.utc)
         days_ago = today - timedelta(days=days)
 
         filtered_data["date"] = pd.to_datetime(filtered_data["date"])
