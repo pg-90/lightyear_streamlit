@@ -10,8 +10,9 @@ import requests
 # Define a modern User-Agent header
 NEW_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
+
 
 # Monkey-patch the YfData class to use the new headers
 class PatchedYfData(YfData):
@@ -20,10 +21,12 @@ class PatchedYfData(YfData):
             kwargs["headers"] = NEW_HEADERS
         return super()._fetch(url, params=params, **kwargs)
 
+
 # Replace the default YfData instance with our patched version
 patched_data_instance = PatchedYfData()
 patched_data_instance.session = requests.Session()
 yf.shared._data = patched_data_instance
+
 
 class Extractor:
     """This is the extractor Class"""
@@ -61,9 +64,9 @@ class Extractor:
         # Remove any trailing suffix that resembles a domain pattern:
         # This regex removes a pattern at the end that starts with alphanumeric characters,
         # followed by a dot and two or more letters (e.g., 'iqq0.de', 'abc123.com').
-        col = re.sub(r'[a-z0-9]+\.[a-z]{2,}$', '', col)
+        col = re.sub(r"[a-z0-9]+\.[a-z]{2,}$", "", col)
         # Remove any remaining underscores.
-        col = col.replace('_', '')
+        col = col.replace("_", "")
         return col
 
     def extract_data(self) -> dict:
@@ -75,7 +78,11 @@ class Extractor:
                 ticker,
                 start=self.start_date,
                 end=self.end_date,
-                interval="60m"
+                group_by="ticker",
+                progress=False,
+                prepost=False,
+                interval="1h",
+                auto_adjust=True,
             )
             # If the data is nested by ticker symbol, extract it accordingly.
             if ticker in stock_data:
