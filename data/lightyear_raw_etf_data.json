@@ -14,6 +14,8 @@
     "CSPX": "AEX",
     "CSX5": "AEX",
     "DAX": "PAR",
+    "DFEN": "XETRA",
+    "DFND": "PAR",
     "ECN": "PAR",
     "EMIM": "AEX",
     "EUNM": "XETRA",
