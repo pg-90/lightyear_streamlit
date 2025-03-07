@@ -25,7 +25,7 @@ st.title("Lightyear Analysis App")
 
 # Default settings
 default_start_date = (datetime.today() - timedelta(days=151)).strftime("%Y-%m-%d")
-default_days = 2
+default_days = 5
 default_rsi_buy = 40
 default_cci_buy = -85
 default_rsi_sell = 65
