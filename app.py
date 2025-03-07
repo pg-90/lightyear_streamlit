@@ -192,7 +192,6 @@ with st.expander("Plot Selected Symbol Data"):
         start_date_plot = st.date_input(
             "Start Date", default_start_date
         )
-        start_date_plot = st.date_input("Start Date", value=datetime.strptime(default_start_date, "%Y-%m-%d").date())
 
         end_date_plot = datetime.today()  # Set end date to today's date
 
