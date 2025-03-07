@@ -190,8 +190,9 @@ with st.expander("Plot Selected Symbol Data"):
 
     with col_date_range:
         start_date_plot = st.date_input(
-            "Start Date", datetime.today() - timedelta(days=45)
+            "Start Date", value=datetime.strptime(default_start_date, "%Y-%m-%d").date()
         )
+
         end_date_plot = datetime.today()  # Set end date to today's date
 
     # Ensure both start_date_plot and end_date_plot are datetime.date objects
