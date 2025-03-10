@@ -24,7 +24,9 @@ def load_and_filter_analyzed_data(analyzed_folder):
 st.title("Lightyear Analysis App")
 
 # Default settings
-default_start_date = (datetime.today() - timedelta(days=151)).strftime("%Y-%m-%d")
+default_start_date = (datetime.today() - timedelta(days=729)).strftime(
+    "%Y-%m-%d"
+)  # Set to 301 for better coverage
 default_days = 5
 default_rsi_buy = 40
 default_cci_buy = -85
@@ -189,9 +191,7 @@ with st.expander("Plot Selected Symbol Data"):
         selected_plot_symbol = st.selectbox("Select Symbol to Plot", symbols)
 
     with col_date_range:
-        start_date_plot = st.date_input(
-            "Start Date", default_start_date
-        )
+        start_date_plot = st.date_input("Start Date", default_start_date)
 
         end_date_plot = datetime.today()  # Set end date to today's date
 
@@ -253,16 +253,18 @@ with st.expander("Plot Selected Symbol Data"):
                         "cci_25": "last",
                         "ma_9": "last",
                         "ma_50": "last",
+                        "ma_250": "last",  # Add ma_250
                     }
                 )
             else:
                 df_symbol = df_symbol.set_index("date")
 
-            # Create subplots
-            fig, axes = plt.subplots(3, 1, figsize=(12, 10), sharex=True)
+            # Create subplots for multiple plots
+            fig, axes = plt.subplots(
+                3, 1, figsize=(12, 12)
+            )  # 3 rows, 1 column for different plots
 
             # Plot Closing Price & Moving Averages
-            has_ma_50 = "ma_50" in df_symbol.columns
             axes[0].plot(
                 df_symbol.index, df_symbol["close"], label="Close Price", color="blue"
             )
@@ -273,37 +275,41 @@ with st.expander("Plot Selected Symbol Data"):
                 linestyle="dashed",
                 color="orange",
             )
-            if has_ma_50:
-                axes[0].plot(
-                    df_symbol.index,
-                    df_symbol["ma_50"],
-                    label="MA 50",
-                    linestyle="dashed",
-                    color="green",
-                )
-            axes[0].set_title(f"{selected_plot_symbol} Price and MAs")
-            axes[0].legend(loc="best")
+            axes[0].plot(
+                df_symbol.index,
+                df_symbol["ma_50"],
+                label="MA 50",
+                linestyle="dashed",
+                color="green",
+            )
+            axes[0].plot(
+                df_symbol.index,
+                df_symbol["ma_250"],
+                label="MA 250",
+                linestyle="dashed",
+                color="red",
+            )
+            axes[0].set_title(f"Price & Moving Averages ({selected_plot_symbol})")
+            axes[0].legend()
 
             # Plot RSI
             axes[1].plot(
                 df_symbol.index, df_symbol["rsi_14"], label="RSI 14", color="purple"
             )
-            axes[1].axhline(30, color="red", linestyle="--")
-            axes[1].axhline(70, color="red", linestyle="--")
-            axes[1].set_title("RSI 14")
-            axes[1].legend(loc="best")
+            axes[1].axhline(y=30, color="red", linestyle="--", label="RSI 30")
+            axes[1].axhline(y=70, color="green", linestyle="--", label="RSI 70")
+            axes[1].set_title(f"RSI ({selected_plot_symbol})")
+            axes[1].legend()
 
             # Plot CCI
             axes[2].plot(
-                df_symbol.index, df_symbol["cci_25"], label="CCI 25", color="green"
+                df_symbol.index, df_symbol["cci_25"], label="CCI 25", color="brown"
             )
-            axes[2].axhline(100, color="red", linestyle="--")
-            axes[2].axhline(-100, color="red", linestyle="--")
-            axes[2].set_title("CCI 25")
-            axes[2].legend(loc="best")
+            axes[2].axhline(y=-100, color="red", linestyle="--", label="CCI -100")
+            axes[2].axhline(y=100, color="green", linestyle="--", label="CCI 100")
+            axes[2].set_title(f"CCI ({selected_plot_symbol})")
+            axes[2].legend()
 
+            # Display the plot
             plt.tight_layout()
             st.pyplot(fig)
-            st.write(
-                f"### Data for {selected_plot_symbol} from {start_date_plot} to {end_date_plot}"
-            )

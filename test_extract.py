@@ -7,7 +7,8 @@ start_date = (datetime.today() - timedelta(days=151)).strftime("%Y-%m-%d")
 
 with open("data/lightyear_yfinance_etf_data.json", "r") as f:
     data = json.load(f)
-
+    print(len(data.values()))
+    
 for d in data.values():
     extractor = Extractor(
         tickers=[d],
@@ -16,5 +17,5 @@ for d in data.values():
         target_folder="data/tickers",
     )
     result = extractor.extract_data()
-    print(result)
+    #print(result)
 ## 'DBXN.DE' , 'DFND.PA', wbit.du, weth.du

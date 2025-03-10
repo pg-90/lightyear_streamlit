@@ -62,6 +62,7 @@ class TickerAnalyzer:
         main_df["ma_9"] = main_df["close"].rolling(window=9).mean()
         main_df["ma_14"] = main_df["close"].rolling(window=14).mean()  # 14-day MA
         main_df["ma_50"] = main_df["close"].rolling(window=50).mean()  # 50-day MA
+        main_df["ma_250"] = main_df["close"].rolling(window=250).mean()  # 250-day MA
 
         main_df.reset_index(inplace=True)
         main_df.rename(columns={"index": "date"}, inplace=True)
@@ -76,6 +77,7 @@ class TickerAnalyzer:
             "ma_9",
             "ma_14",
             "ma_50",
+            "ma_250",
         ]
 
         main_df.to_csv(analyzed_file_path, index=False, columns=cols_to_keep)
